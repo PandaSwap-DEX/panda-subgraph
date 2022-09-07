@@ -1,6 +1,6 @@
 specVersion: 0.0.3
 description: MasterChefV2
-repository: https://github.com/pandaswap/pandaswapswap-subgraph
+repository: git@github.com:PandaSwap-DEX/panda-subgraph.git
 schema:
   file: ./schema.graphql
 dataSources:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 17047980
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.2
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/mappings/masterchefV2.ts
       entities:

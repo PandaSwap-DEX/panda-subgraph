@@ -5,7 +5,7 @@ features:
 graft:
   base: QmaHRgUYDNKEXueDTA1Ntnv4rTWsignS9LojZFwyBr2mVm
   block: 17140600
-repository: https://github.com/pandaswap
+repository: https://github.com/PandaSwap-DEX
 schema:
   file: ./schema.graphql
 dataSources:
@@ -18,7 +18,7 @@ dataSources:
       startBlock: 10333825
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.2
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:

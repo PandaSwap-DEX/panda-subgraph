@@ -7,9 +7,9 @@ import {
   BD_ZERO,
   BI_ONE,
   MOBOX_XDAI,
-  MOBOX_BUSD,
+  MOBOX_USDC,
   TRACKED_TOKEN_XDAI_PAIRS,
-  TRACKED_TOKEN_BUSD_PAIRS,
+  TRACKED_TOKEN_USDC_PAIRS,
 } from "./utils";
 
 /**
@@ -38,8 +38,8 @@ export function handleSwap(event: Swap): void {
   let xdaiIN: BigDecimal;
   let xdaiOUT: BigDecimal;
 
-  let busdIN: BigDecimal;
-  let busdOUT: BigDecimal;
+  let usdcIN: BigDecimal;
+  let usdcOUT: BigDecimal;
 
   log.info("Pair info: {}, amount0In: {}, amount1In: {}, amount0Out: {}, amount1Out: {}", [
     event.address.toHex(),
@@ -49,10 +49,10 @@ export function handleSwap(event: Swap): void {
     event.params.amount1Out.toString(),
   ]);
 
-  if (TRACKED_TOKEN_BUSD_PAIRS.includes(event.address.toHex())) {
-    busdIN = event.params.amount1In.toBigDecimal().div(BD_1E18);
-    busdOUT = event.params.amount1Out.toBigDecimal().div(BD_1E18);
-    log.info("Pair found: {}, busdIN: {}, busdOUT: {}", [event.address.toHex(), busdIN.toString(), busdOUT.toString()]);
+  if (TRACKED_TOKEN_USDC_PAIRS.includes(event.address.toHex())) {
+    usdcIN = event.params.amount1In.toBigDecimal().div(BD_1E18);
+    usdcOUT = event.params.amount1Out.toBigDecimal().div(BD_1E18);
+    log.info("Pair found: {}, usdcIN: {}, usdcOUT: {}", [event.address.toHex(), usdcIN.toString(), usdcOUT.toString()]);
   } else if (TRACKED_TOKEN_XDAI_PAIRS.includes(event.address.toHex())) {
     xdaiIN = event.params.amount1In.toBigDecimal().div(BD_1E18);
     xdaiOUT = event.params.amount1Out.toBigDecimal().div(BD_1E18);
@@ -68,7 +68,7 @@ export function handleSwap(event: Swap): void {
     volumeXDAI = xdaiOUT.plus(xdaiIN);
     volumeUSD = volumeXDAI.times(bundle.xdaiPrice);
   } else {
-    volumeUSD = busdIN.plus(busdOUT);
+    volumeUSD = usdcIN.plus(usdcOUT);
     volumeXDAI = volumeUSD.div(bundle.xdaiPrice);
   }
 
@@ -92,7 +92,7 @@ export function handleSwap(event: Swap): void {
 
   user.volumeUSD = user.volumeUSD.plus(volumeUSD);
   user.volumeXDAI = user.volumeXDAI.plus(volumeXDAI);
-  if (event.address.toHex() == MOBOX_XDAI || event.address.toHex() == MOBOX_BUSD) {
+  if (event.address.toHex() == MOBOX_XDAI || event.address.toHex() == MOBOX_USDC) {
     user.moboxVolumeUSD = user.moboxVolumeUSD.plus(volumeUSD);
     user.moboxVolumeXDAI = user.moboxVolumeXDAI.plus(volumeXDAI);
   }

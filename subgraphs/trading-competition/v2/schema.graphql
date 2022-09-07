@@ -1,7 +1,7 @@
 type Bundle @entity {
     id: ID!
 
-    # Price in USD for XDAI, derived from WXDAI/BUSD pair
+    # Price in USD for XDAI, derived from WXDAI/USDC pair
     xdaiPrice: BigDecimal!
 
     # Block number

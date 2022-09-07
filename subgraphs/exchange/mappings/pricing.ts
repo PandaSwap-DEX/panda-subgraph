@@ -3,26 +3,26 @@ import { BigDecimal, Address } from "@graphprotocol/graph-ts/index";
 import { Pair, Token, Bundle } from "../generated/schema";
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from "./utils";
 
-let WXDAI_ADDRESS = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
-let BUSD_WXDAI_PAIR = "0x58f876857a02d6762e0101bb5c46a8c1ed44dc16"; // created block 589414
-let USDT_WXDAI_PAIR = "0x16b9a82891338f9ba80e2d6970fdda79d1eb0dae"; // created block 648115
+let WXDAI_ADDRESS = "0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d";
+let USDC_WXDAI_PAIR = "0xAe5A3f7f2F8438247eC0FC12eD1707BE009E670c"; // created block 589414
+let USDT_WXDAI_PAIR = "0x4DcE08660e259D1306d658c7af7b5c65dA624700"; // created block 648115
 
 export function getXdaiPriceInUSD(): BigDecimal {
   // fetch eth prices for each stablecoin
   let usdtPair = Pair.load(USDT_WXDAI_PAIR); // usdt is token0
-  let busdPair = Pair.load(BUSD_WXDAI_PAIR); // busd is token1
+  let usdcPair = Pair.load(USDC_WXDAI_PAIR); // usdc is token1
 
-  if (busdPair !== null && usdtPair !== null) {
-    let totalLiquidityXDAI = busdPair.reserve0.plus(usdtPair.reserve1);
+  if (usdcPair !== null && usdtPair !== null) {
+    let totalLiquidityXDAI = usdcPair.reserve0.plus(usdtPair.reserve1);
     if (totalLiquidityXDAI.notEqual(ZERO_BD)) {
-      let busdWeight = busdPair.reserve0.div(totalLiquidityXDAI);
+      let usdcWeight = usdcPair.reserve0.div(totalLiquidityXDAI);
       let usdtWeight = usdtPair.reserve1.div(totalLiquidityXDAI);
-      return busdPair.token1Price.times(busdWeight).plus(usdtPair.token0Price.times(usdtWeight));
+      return usdcPair.token1Price.times(usdcWeight).plus(usdtPair.token0Price.times(usdtWeight));
     } else {
       return ZERO_BD;
     }
-  } else if (busdPair !== null) {
-    return busdPair.token1Price;
+  } else if (usdcPair !== null) {
+    return usdcPair.token1Price;
   } else if (usdtPair !== null) {
     return usdtPair.token0Price;
   } else {
@@ -32,13 +32,12 @@ export function getXdaiPriceInUSD(): BigDecimal {
 
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
-  "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", // WXDAI
-  "0xe9e7cea3dedca5984780bafc599bd69add087d56", // BUSD
-  "0x55d398326f99059ff775485246999027b3197955", // USDT
-  "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d", // USDC
-  "0x23396cf899ca06c4472205fc903bdb4de249d6fc", // UST
-  "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c", // BTCB
-  "0x2170ed0880ac9a755fd29b2688956bd959f933f8", // WETH
+  "0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d", // WXDAI
+  "0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83", // USDC
+  "0x4ecaba5870353805a9f068101a40e0f32ed605c6", // USDT
+  "0xdd96B45877d0E8361a4DDb732da741e97f3191Ff", // BUSD
+  "0x8e5bBbb09Ed1ebdE8674Cda39A0c169401db4252", // WBTC
+  "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1", // WETH
 ];
 
 // minimum liquidity for price to get tracked

@@ -2,7 +2,7 @@
 import { BigDecimal, log } from "@graphprotocol/graph-ts";
 import { Bundle, Competition, Team, User, PairStats } from "../generated/schema";
 import { Swap } from "../generated/templates/Pair/Pair";
-import { BD_1E18, BD_ZERO, BI_ONE, TRACKED_TOKEN_XDAI_PAIRS, TRACKED_TOKEN_BUSD_PAIRS } from "./utils";
+import { BD_1E18, BD_ZERO, BI_ONE, TRACKED_TOKEN_XDAI_PAIRS, TRACKED_TOKEN_USDC_PAIRS } from "./utils";
 
 /**
  * SWAP
@@ -30,8 +30,8 @@ export function handleSwap(event: Swap): void {
   let xdaiIN: BigDecimal;
   let xdaiOUT: BigDecimal;
 
-  let busdIN: BigDecimal;
-  let busdOUT: BigDecimal;
+  let usdcIN: BigDecimal;
+  let usdcOUT: BigDecimal;
 
   log.info("Pair info: {}, amount0In: {}, amount1In: {}, amount0Out: {}, amount1Out: {}", [
     event.address.toHex(),
@@ -41,10 +41,10 @@ export function handleSwap(event: Swap): void {
     event.params.amount1Out.toString(),
   ]);
 
-  if (TRACKED_TOKEN_BUSD_PAIRS.includes(event.address.toHex())) {
-    busdIN = event.params.amount1In.toBigDecimal().div(BD_1E18);
-    busdOUT = event.params.amount1Out.toBigDecimal().div(BD_1E18);
-    log.info("Pair found: {}, busdIN: {}, busdOUT: {}", [event.address.toHex(), busdIN.toString(), busdOUT.toString()]);
+  if (TRACKED_TOKEN_USDC_PAIRS.includes(event.address.toHex())) {
+    usdcIN = event.params.amount1In.toBigDecimal().div(BD_1E18);
+    usdcOUT = event.params.amount1Out.toBigDecimal().div(BD_1E18);
+    log.info("Pair found: {}, usdcIN: {}, usdcOUT: {}", [event.address.toHex(), usdcIN.toString(), usdcOUT.toString()]);
   } else if (TRACKED_TOKEN_XDAI_PAIRS.includes(event.address.toHex())) {
     xdaiIN = event.params.amount1In.toBigDecimal().div(BD_1E18);
     xdaiOUT = event.params.amount1Out.toBigDecimal().div(BD_1E18);
@@ -60,7 +60,7 @@ export function handleSwap(event: Swap): void {
     volumeXDAI = xdaiOUT.plus(xdaiIN);
     volumeUSD = volumeXDAI.times(bundle.xdaiPrice);
   } else {
-    volumeUSD = busdIN.plus(busdOUT);
+    volumeUSD = usdcIN.plus(usdcOUT);
     volumeXDAI = volumeUSD.div(bundle.xdaiPrice);
   }
 

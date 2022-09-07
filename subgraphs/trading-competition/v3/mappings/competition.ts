@@ -8,9 +8,9 @@ import {
   BI_ONE,
   BI_ZERO,
   getXdaiPriceInUSD,
-  TRACKED_TOKEN_BUSD_PAIRS,
+  TRACKED_TOKEN_USDC_PAIRS,
   TRACKED_TOKEN_XDAI_PAIRS,
-  WXDAI_BUSD,
+  WXDAI_USDC,
 } from "./utils";
 
 /**
@@ -96,10 +96,10 @@ export function handleNewCompetitionStatus(event: NewCompetitionStatus): void {
 
   // Competition has opened, trigger PairCreated to follow `Swap` events.
   if (BigInt.fromI32(event.params.status).equals(BI_ONE)) {
-    PairTemplate.create(Address.fromString(WXDAI_BUSD));
+    PairTemplate.create(Address.fromString(WXDAI_USDC));
 
-    log.info("Created pair with address {}.", [WXDAI_BUSD]);
-    TRACKED_TOKEN_BUSD_PAIRS.forEach((address: string) => {
+    log.info("Created pair with address {}.", [WXDAI_USDC]);
+    TRACKED_TOKEN_USDC_PAIRS.forEach((address: string) => {
       PairTemplate.create(Address.fromString(address));
 
       log.info("Created pair with address {}.", [address]);

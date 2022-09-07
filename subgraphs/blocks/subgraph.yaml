@@ -1,0 +1,24 @@
+specVersion: 0.0.2
+description: Gnosis Chain Blocks
+repository: https://github.com/pandaswap
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: GNOSISValidatorSet
+    network: xdai
+    source:
+      address: '0x0000000000000000000000000000000000000000'
+      abi: GNOSISValidatorSet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - Block
+      abis:
+        - name: GNOSISValidatorSet
+          file: ./abis/GNOSISValidatorSet.json
+      blockHandlers:
+        - handler: handleBlock
